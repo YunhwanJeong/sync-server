@@ -1,8 +1,8 @@
 # How to run
 ```
-1. Create .env and .env.test files next to the .env.example files and fill in the variables
+1. npm install
 
-2. npm install
+2. Fill the following fields in the .env and tests/.env.test files -> DB_APP_NAME, DB_HOST, DB_USER, DB_USER_PWD
 
 3. npm run start
 
