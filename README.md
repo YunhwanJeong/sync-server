@@ -43,3 +43,10 @@ For testing: npm run test
 ├── README.md
 ├── package.json
 └── tsconfig.json
+```
+
+# Model Design
+- MenuRenderTree
+  - To make it easier and faster to provide responses when rendering kiosk menus, I created a tree structure from POS responses and stored them separately.
+- The rest were saved in their original form with the posId to make it easier to get back into the POS API structure later when creating orders.
+
