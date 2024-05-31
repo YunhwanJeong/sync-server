@@ -13,3 +13,4 @@ const orderTypeSchema = new Schema<IOrderType>({
 const OrderType = model<IOrderType>('OrderType', orderTypeSchema);
 
 export { OrderType };
+export type { IOrderType };

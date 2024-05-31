@@ -10,12 +10,12 @@ export const syncMenuController = async (
   try {
     const { locationId } = req.params;
 
-    const testPosSyncSummary = await testPosMenuService.syncMenu(locationId);
+    const testPosSyncResults = await testPosMenuService.syncMenu(locationId);
 
     res.status(200).json({
       message: 'Menu synced successfully',
-      summaries: {
-        testPos: testPosSyncSummary,
+      results: {
+        testPos: testPosSyncResults,
       },
     });
   } catch (error) {

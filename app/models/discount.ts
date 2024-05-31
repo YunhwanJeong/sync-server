@@ -19,3 +19,4 @@ const discountSchema = new Schema<IDiscount>({
 const Discount = model<IDiscount>('Discount', discountSchema);
 
 export { Discount };
+export type { IDiscount };

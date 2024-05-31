@@ -6,12 +6,14 @@ import { MenuSection } from '#models/menuSection';
 import { Modifier } from '#models/modifier';
 import { ModifierGroup } from '#models/modifierGroup';
 import { OrderType } from '#models/orderType';
-import { MenuServicePort } from '#services/menuServicePort.type';
 import { Env } from '#start/env';
-import { TestPosApiResponse } from './testPosMenuService.type.js';
+import {
+  TestPosApiResponse,
+  TestPosMenuServicePort,
+} from './testPosMenuService.type.js';
 
-class TestPosMenuServiceAdapter implements MenuServicePort {
-  async syncMenu(locationId?: string): Promise<Record<string, number>> {
+class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
+  async syncMenu(locationId?: string) {
     const { data } = await axios.get<TestPosApiResponse>(
       `${Env.TEST_POS_API_URL}locations/${locationId ?? Env.DEFAULT_LOCATION}/menu`,
     );
@@ -96,7 +98,7 @@ class TestPosMenuServiceAdapter implements MenuServicePort {
     );
     // Process and sync MenuRenderTree
     await MenuRenderTree.deleteMany({});
-    await MenuRenderTree.insertMany(
+    const menuRenderTrees = await MenuRenderTree.insertMany(
       data.sections.map(({ id, ...section }) => ({
         posId: id,
         ...section,
@@ -105,15 +107,15 @@ class TestPosMenuServiceAdapter implements MenuServicePort {
         ),
       })),
     );
-
-    // Return a summary of the synced data
+    // return for testing
     return {
-      sections: sections.length,
-      items: items.length,
-      modGroups: modGroups.length,
-      mods: mods.length,
-      discounts: discounts.length,
-      orderTypes: orderTypes.length,
+      sections,
+      items,
+      modGroups,
+      mods,
+      discounts,
+      orderTypes,
+      menuRenderTrees,
     };
   }
 }
