@@ -2,9 +2,11 @@
 ```
 1. npm install
 
-2. Fill the following fields in the .env and tests/.env.test files -> DB_APP_NAME, DB_HOST, DB_USER, DB_USER_PWD
+2. Fill the following fields in the .env and tests/.env.test files -> DB_NAME, DB_APP_NAME, DB_HOST, DB_USER, DB_USER_PWD
 
 3. npm run start
+
+4. access to http://localhost:3000/trigger-sync
 
 For testing: npm run test
 ```
