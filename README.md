@@ -1,12 +1,14 @@
 # How to run
 ```
-1. npm install
+1. git clone https://github.com/YunhwanJeong/sync-server.git
 
-2. Fill the following fields in the .env and tests/.env.test files -> DB_NAME, DB_APP_NAME, DB_HOST, DB_USER, DB_USER_PWD
+2. npm install
 
-3. npm run start
+3. Fill the following fields in the .env and tests/.env.test files -> DB_NAME, DB_APP_NAME, DB_HOST, DB_USER, DB_USER_PWD
 
-4. access to http://localhost:3000/trigger-sync
+4. npm run start
+
+5. access to http://localhost:3000/trigger-sync
 
 For testing: npm run test
 ```
