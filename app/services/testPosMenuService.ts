@@ -68,45 +68,42 @@ class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
     );
 
     // Process Modifiers
-    const renderTreeModifiers = data.mods.map(
-      ({ id, modGroupIds, ...mod }) => ({
-        posId: id,
-        ...mod,
-      }),
-    );
+    const modifiersMap = new Map();
+    data.mods.forEach(({ id, modGroupIds, ...mod }) => {
+      modifiersMap.set(id, { ...mod, posId: id });
+    });
     // Process ModifierGroups
-    const renderTreeModifierGroups = data.modGroups.map(
-      ({ id, modIds, ...modGroup }) => ({
-        posId: id,
+    const modifierGroupsMap = new Map();
+    data.modGroups.forEach(({ id, modIds, ...modGroup }) => {
+      const populatedMods = modIds.map((modId) => modifiersMap.get(modId));
+      modifierGroupsMap.set(id, {
         ...modGroup,
-        modifiers: modIds.map((modId) =>
-          renderTreeModifiers.find((mod) => mod.posId === modId),
-        ),
-      }),
-    );
-    // Process MenuItems
-    const renderTreeMenuItems = data.items.map(
-      ({ id, modGroupIds, ...item }) => ({
+        modifiers: populatedMods,
         posId: id,
+      });
+    });
+    // Process MenuItems
+    const menuItemsMap = new Map();
+    data.items.forEach(({ id, modGroupIds, ...item }) => {
+      const populatedModGroups = modGroupIds.map((modGroupId) =>
+        modifierGroupsMap.get(modGroupId),
+      );
+      menuItemsMap.set(id, {
         ...item,
-        modGroups: modGroupIds.map((modGroupId) =>
-          renderTreeModifierGroups.find(
-            (modGroup) => modGroup.posId === modGroupId,
-          ),
-        ),
-      }),
-    );
+        modGroups: populatedModGroups,
+        posId: id,
+      });
+    });
     // Process and sync MenuRenderTree
     await MenuRenderTree.deleteMany({});
     const menuRenderTrees = await MenuRenderTree.insertMany(
       data.sections.map(({ id, ...section }) => ({
         posId: id,
         ...section,
-        items: section.itemIds.map((itemId) =>
-          renderTreeMenuItems.find((item) => item.posId === itemId),
-        ),
+        items: section.itemIds.map((itemId) => menuItemsMap.get(itemId)),
       })),
     );
+
     // return for testing
     return {
       sections,
