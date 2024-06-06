@@ -1,4 +1,3 @@
-import axios from '#config/axios';
 import { Discount } from '#models/discount';
 import { MenuItem } from '#models/menuItem';
 import { MenuRenderTree } from '#models/menuRenderTree';
@@ -6,46 +5,38 @@ import { MenuSection } from '#models/menuSection';
 import { Modifier } from '#models/modifier';
 import { ModifierGroup } from '#models/modifierGroup';
 import { OrderType } from '#models/orderType';
-import { Env } from '#start/env';
-import {
-  TestPosApiResponse,
-  TestPosMenuServicePort,
-} from './testPosMenuService.type.js';
+import type MenuDatabaseDrivenPort from '#ports/driven/menuDatabaseDrivenPort.type';
 
-class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
-  async syncMenu(locationId?: string) {
-    const { data } = await axios.get<TestPosApiResponse>(
-      `${Env.TEST_POS_API_URL}locations/${locationId ?? Env.DEFAULT_LOCATION}/menu`,
-    );
-
+class MenuDatabaseDrivenAdapter implements MenuDatabaseDrivenPort {
+  async saveMenu(response: Parameters<MenuDatabaseDrivenPort['saveMenu']>[0]) {
     // Store MenuSections
     await MenuSection.deleteMany({});
-    const sections = await MenuSection.insertMany(
-      data.sections.map(({ id, ...section }) => ({
+    const menuSections = await MenuSection.insertMany(
+      response.menuSections.map(({ id, ...section }) => ({
         posId: id,
         ...section,
       })),
     );
     // Store MenuItems
     await MenuItem.deleteMany({});
-    const items = await MenuItem.insertMany(
-      data.items.map(({ id, ...item }) => ({
+    const menuItems = await MenuItem.insertMany(
+      response.menuItems.map(({ id, ...item }) => ({
         posId: id,
         ...item,
       })),
     );
     // Store ModifierGroups
     await ModifierGroup.deleteMany({});
-    const modGroups = await ModifierGroup.insertMany(
-      data.modGroups.map(({ id, ...modGroup }) => ({
+    const modifierGroups = await ModifierGroup.insertMany(
+      response.modifierGroups.map(({ id, ...modGroup }) => ({
         posId: id,
         ...modGroup,
       })),
     );
     // Store Modifiers
     await Modifier.deleteMany({});
-    const mods = await Modifier.insertMany(
-      data.mods.map(({ id, ...mod }) => ({
+    const modifiers = await Modifier.insertMany(
+      response.modifiers.map(({ id, ...mod }) => ({
         posId: id,
         ...mod,
       })),
@@ -53,7 +44,7 @@ class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
     // Store Discounts
     await Discount.deleteMany({});
     const discounts = await Discount.insertMany(
-      data.discounts.map(({ id, ...discount }) => ({
+      response.discounts.map(({ id, ...discount }) => ({
         posId: id,
         ...discount,
       })),
@@ -61,20 +52,33 @@ class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
     // Store OrderTypes
     await OrderType.deleteMany({});
     const orderTypes = await OrderType.insertMany(
-      data.orderTypes.map(({ id, ...orderType }) => ({
+      response.orderTypes.map(({ id, ...orderType }) => ({
         posId: id,
         ...orderType,
       })),
     );
 
+    return {
+      menuItems,
+      menuSections,
+      modifierGroups,
+      modifiers,
+      discounts,
+      orderTypes,
+    };
+  }
+
+  async saveMenuRenderTree(
+    response: Parameters<MenuDatabaseDrivenPort['saveMenuRenderTree']>[0],
+  ) {
     // Process Modifiers
     const modifiersMap = new Map();
-    data.mods.forEach(({ id, modGroupIds, ...mod }) => {
+    response.modifiers.forEach(({ id, modGroupIds, ...mod }) => {
       modifiersMap.set(id, { ...mod, posId: id });
     });
     // Process ModifierGroups
     const modifierGroupsMap = new Map();
-    data.modGroups.forEach(({ id, modIds, ...modGroup }) => {
+    response.modifierGroups.forEach(({ id, modIds, ...modGroup }) => {
       const populatedMods = modIds.map((modId) => modifiersMap.get(modId));
       modifierGroupsMap.set(id, {
         ...modGroup,
@@ -84,7 +88,7 @@ class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
     });
     // Process MenuItems
     const menuItemsMap = new Map();
-    data.items.forEach(({ id, modGroupIds, ...item }) => {
+    response.menuItmes.forEach(({ id, modGroupIds, ...item }) => {
       const populatedModGroups = modGroupIds.map((modGroupId) =>
         modifierGroupsMap.get(modGroupId),
       );
@@ -97,26 +101,17 @@ class TestPosMenuServiceAdapter implements TestPosMenuServicePort {
     // Process and sync MenuRenderTree
     await MenuRenderTree.deleteMany({});
     const menuRenderTrees = await MenuRenderTree.insertMany(
-      data.sections.map(({ id, ...section }) => ({
+      response.menuSections.map(({ id, ...section }) => ({
         posId: id,
         ...section,
         items: section.itemIds.map((itemId) => menuItemsMap.get(itemId)),
       })),
     );
 
-    // return for testing
     return {
-      sections,
-      items,
-      modGroups,
-      mods,
-      discounts,
-      orderTypes,
       menuRenderTrees,
     };
   }
 }
 
-const testPosMenuService = new TestPosMenuServiceAdapter();
-
-export default testPosMenuService;
+export default MenuDatabaseDrivenAdapter;

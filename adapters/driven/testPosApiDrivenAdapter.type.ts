@@ -1,11 +1,3 @@
-import { IDiscount } from '#models/discount';
-import { IMenuItem } from '#models/menuItem';
-import { IMenuSection } from '#models/menuSection';
-import { IModifier } from '#models/modifier';
-import { IModifierGroup } from '#models/modifierGroup';
-import { IOrderType } from '#models/orderType';
-import type { Document, MergeType } from 'mongoose';
-
 type Section = {
   id: string;
   name: string;
@@ -69,24 +61,4 @@ interface TestPosApiResponse {
   orderTypes: OrderType[];
 }
 
-type InsertManyResultType<T> = MergeType<
-  Document<unknown, {}, T> &
-    T &
-    Required<{
-      _id: unknown;
-    }>,
-  Omit<T, '_id'>
->[];
-
-interface TestPosMenuServicePort {
-  syncMenu(locationId?: string): Promise<{
-    sections: InsertManyResultType<IMenuSection>;
-    items: InsertManyResultType<IMenuItem>;
-    modGroups: InsertManyResultType<IModifierGroup>;
-    mods: InsertManyResultType<IModifier>;
-    discounts: InsertManyResultType<IDiscount>;
-    orderTypes: InsertManyResultType<IOrderType>;
-  }>;
-}
-
-export type { TestPosApiResponse, TestPosMenuServicePort };
+export type { TestPosApiResponse as default };

@@ -35,10 +35,10 @@
     "#controllers/*": "./build/app/controllers/*.js",
     "#exceptions/*": "./build/app/exceptions/*.js",
     "#models/*": "./build/app/models/*.js",
-    "#services/*": "./build/app/services/*.js",
+    "#ports/*": "./build/app/ports/*.js",
     "#middleware/*": "./build/app/middleware/*.js",
     "#validators/*": "./build/app/validators/*.js",
-    "#database/*": "./build/database/*.js",
+    "#adapters/*": "./build/adapters/*.js",
     "#start/*": "./build/start/*.js",
     "#tests/*": "./build/tests/*.js",
     "#config/*": "./build/config/*.js"

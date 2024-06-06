@@ -33,9 +33,10 @@
       "#exceptions/*": ["./app/exceptions/*.js"],
       "#models/*": ["./app/models/*.js"],
       "#services/*": ["./app/services/*.js"],
+      "#ports/*": ["./app/ports/*.js"],
       "#middleware/*": ["./app/middleware/*.js"],
       "#validators/*": ["./app/validators/*.js"],
-      "#database/*": ["./database/*.js"],
+      "#adapters/*": ["./adapters/*.js"],
       "#tests/*": ["./tests/*.js"],
       "#start/*": ["./start/*.js"],
       "#config/*": ["./config/*.js"]

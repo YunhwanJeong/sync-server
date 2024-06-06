@@ -17,12 +17,17 @@ For testing: npm run test
 ```
 /project-root
 │
+├── /adapters -> ports implementation
+│  └── driven
+│  └── driving
 ├── /app -> domain logic
 │  └── controllers
 │  └── exceptions
 │  └── middleware
 │  └── models
-│  └── services
+│  └── ports
+│    └── driven
+│    └── driving
 │  └── validators
 ├── /bin -> entry point
 │  ├── app.ts

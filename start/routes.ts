@@ -1,4 +1,4 @@
-import { syncMenuController } from '#controllers/menuController';
+import { syncMenuController } from '#controllers/syncMenuController';
 import express from 'express';
 
 const router = express.Router();
