@@ -39,7 +39,8 @@
       "#adapters/*": ["./adapters/*.js"],
       "#tests/*": ["./tests/*.js"],
       "#start/*": ["./start/*.js"],
-      "#config/*": ["./config/*.js"]
+      "#config/*": ["./config/*.js"],
+      "#bin/*": ["./bin/*.js"]
     }
   },
   "exclude": ["node_modules", "build"]

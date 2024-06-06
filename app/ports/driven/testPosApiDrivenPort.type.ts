@@ -1,14 +1,19 @@
 import type TestPosApiResponse from '#adapters/driven/testPosApiDrivenAdapter.type';
 
+type TestPosApiDrivenPortGetMenuReturnType = {
+  menuSections: TestPosApiResponse['sections'];
+  menuItems: TestPosApiResponse['items'];
+  modifierGroups: TestPosApiResponse['modGroups'];
+  modifiers: TestPosApiResponse['mods'];
+  discounts: TestPosApiResponse['discounts'];
+  orderTypes: TestPosApiResponse['orderTypes'];
+};
+
 interface TestPosApiDrivenPort {
-  getMenu(locationId?: string): Promise<{
-    menuSections: TestPosApiResponse['sections'];
-    menuItems: TestPosApiResponse['items'];
-    modifierGroups: TestPosApiResponse['modGroups'];
-    modifiers: TestPosApiResponse['mods'];
-    discounts: TestPosApiResponse['discounts'];
-    orderTypes: TestPosApiResponse['orderTypes'];
-  }>;
+  getMenu(locationId?: string): Promise<TestPosApiDrivenPortGetMenuReturnType>;
 }
 
-export type { TestPosApiDrivenPort as default };
+export type {
+  TestPosApiDrivenPortGetMenuReturnType,
+  TestPosApiDrivenPort as default,
+};

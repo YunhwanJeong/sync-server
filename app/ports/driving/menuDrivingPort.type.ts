@@ -3,13 +3,12 @@ import type {
   MenuDatabaseDrivenPortSaveMenuReturnType,
 } from '#ports/driven/menuDatabaseDrivenPort.type';
 
+type MenuDrivingPortSyncMenuReturnType =
+  MenuDatabaseDrivenPortSaveMenuReturnType &
+    MenuDatabaseDrivenPortSaveMenuRenderTreeReturnType;
+
 interface MenuDrivingPort {
-  syncMenu(
-    locationId?: string,
-  ): Promise<
-    MenuDatabaseDrivenPortSaveMenuReturnType &
-      MenuDatabaseDrivenPortSaveMenuRenderTreeReturnType
-  >;
+  syncMenu(locationId?: string): Promise<MenuDrivingPortSyncMenuReturnType>;
 }
 
-export type { MenuDrivingPort as default };
+export type { MenuDrivingPortSyncMenuReturnType, MenuDrivingPort as default };

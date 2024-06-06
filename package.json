@@ -41,7 +41,8 @@
     "#adapters/*": "./build/adapters/*.js",
     "#start/*": "./build/start/*.js",
     "#tests/*": "./build/tests/*.js",
-    "#config/*": "./build/config/*.js"
+    "#config/*": "./build/config/*.js",
+    "#bin/*": "./build/bin/*.js"
   },
   "scripts": {
     "start": "npm run build && npm run serve",
@@ -55,7 +56,7 @@
     "check": "tsc --noEmit",
     "eslint": "eslint . --ext .js,.ts",
     "format": "prettier --write \"src/**/*.{ts,js}\"",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles",
     "test-watch": "jest --watch",
     "postinstall": "npm run copy-env",
     "copy-env": "node scripts/copyEnvIfMissing.js",
