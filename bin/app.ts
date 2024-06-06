@@ -2,6 +2,7 @@ import connectDB from '#config/database';
 import Logger from '#config/logger';
 import corsMiddleware from '#middleware/corsMiddleware';
 import errorMiddleware from '#middleware/errorMiddleware';
+import rateLimittingMiddleware from '#middleware/rateLimittingMiddleware';
 import routes from '#start/routes';
 import express from 'express';
 
@@ -18,6 +19,7 @@ app.use(
   express.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 }),
 );
 app.use(corsMiddleware);
+app.use(rateLimittingMiddleware);
 app.use(routes);
 app.use(errorMiddleware);
 
